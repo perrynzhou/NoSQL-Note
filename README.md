@@ -11,3 +11,4 @@
 - [1.memcached线程模型分析](./document/memcached线程模型分析.md)
 
 ## redis分析
+- [1.缓存的基本介绍](./document/缓存的基本介绍.md)
