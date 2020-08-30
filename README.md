@@ -7,6 +7,9 @@
 - 针对该版本在代码层面梳理一份有C语言基础的同学都可以读懂
 
 
+## 分布式系统基本理论
+- [1.分布式系统基本理论](./document/m分布式系统基本理论.md)
+
 ## memcached分析
 - [1.memcached线程模型分析](./document/memcached线程模型分析.md)
 
