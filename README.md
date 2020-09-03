@@ -12,10 +12,12 @@
 - [2.缓存的基本介绍](./document/分布式系统原理/缓存的基本介绍.md)
 
 ## memcached分析
-- [1.memcached线程模型分析](./document/memcached源码分析/memcached线程模型分析.md)
+- [1.memcached介绍](./document/memcached分析/memcached基本介绍.md)
+
+- [2.memcached线程模型分析](./document/memcached分析/memcached线程模型分析.md)
 
 ## redis分析
-
+- [1.redis支持的数据结构和编码方式](./document/redis分析/redis支持的几种数据结构和编码方式.md)
 
 ## redis运维
 - [1.redis客户端问题案例](./document/redis运维/Redis客户端问题案例.md)
