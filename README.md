@@ -17,7 +17,9 @@
 - [2.memcached线程模型分析](./document/memcached分析/memcached线程模型分析.md)
 
 ## redis分析
-- [1.redis支持的数据结构和编码方式](./document/redis分析/redis支持的几种数据结构和编码方式.md)
+- [1.redis调试环境](./document/redis分析/redis源码调试环境.md)
+- [2.redis支持的数据结构和编码方式](./document/redis分析/redis支持的几种数据结构和编码方式.md)
+- [3.redis字符串的实现原理](./document/redis分析/redis字符串的实现原理.md)
 
 ## redis运维
 - [1.redis客户端问题案例](./document/redis运维/Redis客户端问题案例.md)
