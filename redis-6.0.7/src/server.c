@@ -5230,6 +5230,7 @@ int main(int argc, char **argv) {
             exit(1);
         }
         resetServerSaveParams();
+        //配置文件就加载
         loadServerConfig(configfile,options);
         sdsfree(options);
     }

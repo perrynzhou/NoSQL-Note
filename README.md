@@ -1,5 +1,10 @@
 # kv存储系统 阅读笔记
 
+| author | update |
+| ------ | ------ |
+| perrynzhou@gmail.com | 2020/05/24 |
+
+
 ## 目标
 
 - 梳理redis/memcached的读写流程、复制详细过程

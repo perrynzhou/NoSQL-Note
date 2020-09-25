@@ -1,5 +1,10 @@
 ## redis的支持几种数据结构和编码方式
 
+| author | update |
+| ------ | ------ |
+| perrynzhou@gmail.com | 2020/05/24 |
+
+
 ### redis支持的的数据类型有哪几种?
 
   ![redis-struct](../images/redis-data-struct.jpg)
