@@ -5269,6 +5269,7 @@ int main(int argc, char **argv) {
     #endif
         moduleLoadFromQueue();
         ACLLoadUsersAtStartup();
+        //redis多线程的函数的初始化
         InitServerLast();
         loadDataFromDisk();
         if (server.cluster_enabled) {
