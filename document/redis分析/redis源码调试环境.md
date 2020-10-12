@@ -1,6 +1,11 @@
 
 ## redis源码调试
 
+| author | update |
+| ------ | ------ |
+| perrynzhou@gmail.com | 2020/05/24 |
+
+
 ### 系统GCC要求
 
 - redis6.x需要gcc 5.3以上的版本,因此需要升级gcc版本

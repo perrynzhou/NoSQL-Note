@@ -1,6 +1,11 @@
 ## redis 字符串实现分析
 
 
+| author | update |
+| ------ | ------ |
+| perrynzhou@gmail.com | 2020/05/24 |
+
+
 
 - redis字符串定义结构如下
 

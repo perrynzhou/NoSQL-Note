@@ -5230,6 +5230,7 @@ int main(int argc, char **argv) {
             exit(1);
         }
         resetServerSaveParams();
+        //配置文件就加载
         loadServerConfig(configfile,options);
         sdsfree(options);
     }
@@ -5268,6 +5269,7 @@ int main(int argc, char **argv) {
     #endif
         moduleLoadFromQueue();
         ACLLoadUsersAtStartup();
+        //redis多线程的函数的初始化
         InitServerLast();
         loadDataFromDisk();
         if (server.cluster_enabled) {

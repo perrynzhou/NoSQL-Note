@@ -3142,6 +3142,7 @@ int handleClientsWithPendingWritesUsingThreads(void) {
     return processed;
 }
 
+//把client放到队列中
 /* Return 1 if we want to handle the client read later using threaded I/O.
  * This is called by the readable handler of the event loop.
  * As a side effect of calling this function the client is put in the
