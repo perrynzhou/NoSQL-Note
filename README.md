@@ -15,6 +15,7 @@
 ## 分布式系统基本理论
 - [1.分布式系统基本理论](./document/分布式系统原理/分布式系统基本理论.md)
 - [2.缓存的基本介绍](./document/分布式系统原理/缓存的基本介绍.md)
+- [3.缓存系统中的高并发](./document/分布式系统原理/缓存系统中的高并发.md)
 
 ## memcached分析
 - [1.memcached介绍](./document/memcached分析/memcached基本介绍.md)
