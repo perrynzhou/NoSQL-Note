@@ -526,7 +526,7 @@ void hsetnxCommand(client *c) {
         server.dirty++;
     }
 }
-
+//hset命令处理逻辑
 void hsetCommand(client *c) {
     int i, created = 0;
     robj *o;
