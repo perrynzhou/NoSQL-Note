@@ -18,7 +18,7 @@
 split -b 30m  postgres.tar.gz  postgres.tar.gz.  –verbose
 
 //合并小文件为大文件
-cat  postgres.tar.gz.a*  postgres.tar.gz 
+cat  postgres.tar.gz.a*  > postgres.tar.gz 
 ```
 ## redis/memcached存储系统
 - [分布式系统基本理论](./document/分布式系统原理/分布式系统基本理论.md)
