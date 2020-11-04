@@ -1,6 +1,8 @@
 ### memcached 线程模型分析
 
-
+| author | update |
+| ------ | ------ |
+| perrynzhou@gmail.com | 2020/06/24 |
 
 ### memcached 有几种类型的线程?
 memcached有2类线程，一类是main线程，一类是worker线程，main线程负责监听listenfd放到main_base中进行监听，一旦listenfd中有IO事件,也就是有新的连接进来，则转发通过dispatch_conn_new函数初始化一个CQ_ITEM，把对应的clientfd封装在CQ_ITEM中，同时把item放到线程的CQ_ITEM队列中，然后写入标记数据到线程的notify_send_fd中，worker线程则是监听工作线程中的notify_recv_fd中的IO事件，根据读取到的标记数据来初始化一个新连接，接着处理这个链接，释放CQ_ITEM

@@ -1,5 +1,9 @@
 ## ziplist详解
 
+| author | update |
+| ------ | ------ |
+| perrynzhou@gmail.com | 2020/05/24 |
+
 ### 介绍
 - ziplist本质是一个字节数组，为了节约内存的使用而设计线性结构。当存储的元素个数比较少，元素都是短字符时候，redis使用压缩列表作为底层数据存储的结构，ziplist实现是在ziplist.h/ziplist.c中
 

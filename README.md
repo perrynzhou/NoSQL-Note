@@ -30,5 +30,7 @@ cat  postgres.tar.gz.a*  > postgres.tar.gz
 - [redis支持的数据结构和编码方式](./document/redis分析/redis支持的几种数据结构和编码方式.md)
 - [redis字符串的实现原理](./document/redis分析/redis字符串的实现原理.md)
 - [redis客户端问题案例](./document/redis运维/Redis客户端问题案例.md)
-
+- [事务一致性解决方案](./document/分布式系统原理/2020-11-04-事务一致性解决方案.md)
+  
 ## postgresql数据库
+- todo
