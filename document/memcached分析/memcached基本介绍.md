@@ -1,5 +1,9 @@
 ## memcached 基本介绍 
 
+| author | update |
+| ------ | ------ |
+| perrynzhou@gmail.com | 2020/07/24 |
+
 ### memcached应用场景
 - memcache主要应用在于减少数据库的压力场景，第一次访问数据未命中，从数据库加到并存储到memcache中，第二次直接访问memcached获取数据
 
