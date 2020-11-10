@@ -1,11 +1,11 @@
 ## redis 6多线程模型
 
 
-
+### redis 多线程介绍
+- redis6之前的版本一直单线程方式解析命令、处理命令，这样的模式实现起来简单，但是无法使用多核CPU的优势，无法达到性能的极致；到了redis 6，redis6采用多线程模式来来读取和解析命令，但是命令的执行依然通过队列由主线程串行执行，多线程的好处是分离了命令的解析和命令执行，命令的解析有独立的IO线程进行，命令执行依旧有main线程执行,多线程增加了代码的复杂度
 ### 开启多线程模型
 
 - Redis.conf添加如下配置
-
   ```
   io-threads 4
   io-threads-do-reads yes
@@ -22,11 +22,9 @@
 - 启动redis并查看多线程
     ![redis-struct](../images/start-redis-multi-thread.jpg)
     ![redis-thrad](../images/2.png)
-    - redis-server主线程
-    - bio_close_file线程
-    - bio_aof_fsync线程
-    - io_thd线程
-    - jemalloc_bg_thd线程
+    - redis-server thread:从队列中取出数据一次执行命令
+    - bio_aof_fsync thread :page cache中的aof数据fsync到磁盘的线程
+    - io_thd thread: 从tcp中读取命令同时解析命令
 
 
 - 多线程主逻辑
@@ -34,30 +32,41 @@
 int main(int argc, char **argv) {
     // 加载配置文件
     loadServerConfig(configfile,options);
-    //主线程逻辑初始化
-    initServer();
+    //主线程逻辑初始化，启动aeCreateFileEvent/beforeSleep.
+    initServer() {
+    	void beforeSleep(struct aeEventLoop *eventLoop) {
+	 		handleClientsWithPendingReadsUsingThreads() {
+	 			readQueryFromClient->processInputBuffer->processCommandAndResetClient->processCommand->call
+	 		}
+		}
+    }
     //多线程模型初始化
     InitServerLast();
+    aeMain(server.el);
 }
 
+
 void InitServerLast() {
-    bioInit();
     initThreadedIO();
     set_jemalloc_bg_thread(server.jemalloc_bg_thread);
     server.initial_memory_usage = zmalloc_used_memory();
 }
-/* Initialize the background system, spawning the thread. */
-void bioInit(void) {
-     //BIO_NUM_OPS 硬编码为3
-     for (j = 0; j < BIO_NUM_OPS; j++) {
-            pthread_create(&thread,&attr,bioProcessBackgroundJobs,arg)
-        }
-    }
-}
+
 void initThreadedIO(void) {
      for (int i = 0; i < server.io_threads_num; i++) {
          pthread_create(&tid,NULL,IOThreadMain,(void*)(long)i);
      }
+}
+void *IOThreadMain(void *myid) {
+	while(1) {
+		 listIter li;
+        listNode *ln;
+        listRewind(io_threads_list[id],&li);
+        while((ln = listNext(&li))) {
+        	//这里解析命令同时放到client放到 server.clients_pending_read队列中
+        	readQueryFromClient(c->conn);
+        }
+	}
 }
 ```
 
@@ -83,6 +92,45 @@ ConnectionType CT_Socket = {
 ```
 
 ```
+int processCommand(client *c) {
+	
+	call(c,CMD_CALL_FULL);
+}
+int processCommandAndResetClient(client *c) {
+	processCommand(c)
+}
+int handleClientsWithPendingReadsUsingThreads(void) {
+	while(listLength(server.clients_pending_read)) {
+        ln = listFirst(server.clients_pending_read);
+        client *c = listNodeValue(ln);
+        c->flags &= ~CLIENT_PENDING_READ;
+        listDelNode(server.clients_pending_read,ln);
+        processCommandAndResetClient(c) == C_ERR)
+        processInputBuffer(c);
+    }
+}
+void beforeSleep(struct aeEventLoop *eventLoop) {
+   handleClientsWithPendingReadsUsingThreads();
+}
+int postponeClientRead(client *c) {
+    if (server.io_threads_active &&
+        server.io_threads_do_reads &&
+        !ProcessingEventsWhileBlocked &&
+        !(c->flags & (CLIENT_MASTER|CLIENT_SLAVE|CLIENT_PENDING_READ)))
+    {
+        c->flags |= CLIENT_PENDING_READ;
+        listAddNodeHead(server.clients_pending_read,c);
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+void readQueryFromClient(connection *conn) {
+	 /* Check if we want to read from the client later when exiting from
+     * the event loop. This is the case if threaded I/O is enabled. */
+    if (postponeClientRead(c)) return;
+}
 //一个客户端计入流程
 client *createClient(connection *conn) {
     client *c = zmalloc(sizeof(client));
