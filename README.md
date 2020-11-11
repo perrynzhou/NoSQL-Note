@@ -20,14 +20,13 @@
 - [redis支持的数据结构和编码方式](./document/redis/redis支持的几种数据结构和编码方式.md)
 - [redis字符串的实现原理](./document/redis/redis字符串的实现原理.md)
 - [redis客户端问题案例](./document/redis/Redis客户端问题案例.md)
+- [RedisBloom源码编译和加载](./document/redis/2020-11-11-redisbloom源码编译和加载.md)
+
 
 ## memcached篇
 - [memcached介绍](./document/memcached分析/memcached基本介绍.md)
 - [memcached线程模型分析](./document/memcached分析/memcached线程模型分析.md)
   
-## redisbloom模块分析
-
-- [编译安装](./document/redis/2020-11-04-事务一致性解决方案.md)
 
 
 ## 文件解压缩
