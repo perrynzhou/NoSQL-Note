@@ -1,4 +1,4 @@
-## 2020-11-11-redisrebloom源码编译和加载
+## RedisBloom源码编译和加载
 
 | author | update |
 | ------ | ------ |
