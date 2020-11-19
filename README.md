@@ -24,8 +24,8 @@
 
 
 ## memcached篇
-- [memcached介绍](./document/memcached分析/memcached基本介绍.md)
-- [memcached线程模型分析](./document/memcached分析/memcached线程模型分析.md)
+- [memcached介绍](./document/memcached/memcached基本介绍.md)
+- [memcached线程模型分析](./document/memcached/memcached线程模型分析.md)
   
 
 
