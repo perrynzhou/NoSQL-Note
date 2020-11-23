@@ -21,7 +21,7 @@
 - [redis字符串的实现原理](./document/redis/redis字符串的实现原理.md)
 - [redis客户端问题案例](./document/redis/Redis客户端问题案例.md)
 - [RedisBloom源码编译和加载](./document/redis/2020-11-11-redisbloom源码编译和加载.md)
-
+- [分布式系统数据分布策略.md](./document/redis/2020-11-24-分布式系统数据分布策略.md)
 
 ## memcached篇
 - [memcached介绍](./document/memcached/memcached基本介绍.md)
