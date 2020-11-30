@@ -344,6 +344,7 @@ static int updateOOMScoreAdjValues(sds *args, char **err) {
 
 void initConfigValues() {
     for (standardConfig *config = configs; config->name != NULL; config++) {
+        // boolConfigInit
         config->interface.init(config->data);
     }
 }
