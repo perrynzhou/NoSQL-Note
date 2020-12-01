@@ -149,6 +149,7 @@ static inline int connWrite(connection *conn, const void *data, size_t data_len)
  * connGetState() to see if the connection state is still CONN_STATE_CONNECTED.
  */
 static inline int connRead(connection *conn, void *buf, size_t buf_len) {
+    //conn->type->read=connSocketRead
     return conn->type->read(conn, buf, buf_len);
 }
 
@@ -165,6 +166,7 @@ static inline int connSetWriteHandler(connection *conn, ConnectionCallbackFunc f
 static inline int connSetReadHandler(connection *conn, ConnectionCallbackFunc func) {
 	// conn->type->set_read_handler = connSocketSetReadHandler
 	// func = readQueryFromClient
+    // conn->read_handler = func = readQueryFromClient
     return conn->type->set_read_handler(conn, func);
 }
 
