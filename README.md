@@ -22,7 +22,9 @@
 - [redis客户端问题案例](./document/redis/Redis客户端问题案例.md)
 - [RedisBloom源码编译和加载](./document/redis/2020-11-11-redisbloom源码编译和加载.md)
 - [分布式系统数据分布策略.md](./document/redis/2020-11-24-分布式系统数据分布策略.md)
-- [redis6.x启动过程](./document/redis/redis6.x启动过程.md)
+- [redis6.x启动过程-持续更新](./document/redis/redis6.x启动过程.md)
+- [redis字符串操作实现-持续更新](./document/redis/2020-12-02-redis字符串操作实现.md)
+
 ## memcached篇
 - [memcached介绍](./document/memcached/memcached基本介绍.md)
 - [memcached线程模型分析](./document/memcached/memcached线程模型分析.md)
