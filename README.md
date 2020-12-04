@@ -24,6 +24,8 @@
 - [分布式系统数据分布策略.md](./document/redis/2020-11-24-分布式系统数据分布策略.md)
 - [redis6.x启动过程-持续更新](./document/redis/redis6.x启动过程.md)
 - [redis字符串操作实现-持续更新](./document/redis/2020-12-02-redis字符串操作实现.md)
+- [redis6强制多线程调试](./document/redis/2020-12-04-Redis6强制多线程调试.md)
+
 
 ## memcached篇
 - [memcached介绍](./document/memcached/memcached基本介绍.md)
