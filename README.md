@@ -1,8 +1,8 @@
 # NoSQL存储系统 阅读笔记
 
-| author | update |
-| ------ | ------ |
-| perrynzhou@gmail.com | 2020/05/24 |
+| 作者 | 时间 |QQ技术交流群 |
+| ------ | ------ |------ |
+| perrynzhou@gmail.com |2020/12/05 |中国开源存储技术交流群(672152841) ||
 
 
 ## 目标
@@ -25,7 +25,7 @@
 - [redis6.x启动过程-持续更新](./document/redis/redis6.x启动过程.md)
 - [redis字符串操作实现-持续更新](./document/redis/2020-12-02-redis字符串操作实现.md)
 - [redis6强制多线程调试](./document/redis/2020-12-04-Redis6强制多线程调试.md)
-
+- [Redis集群技术介绍](./document/redis/2020-12-05-Redis集群技术介绍.md)
 
 ## memcached篇
 - [memcached介绍](./document/memcached/memcached基本介绍.md)
