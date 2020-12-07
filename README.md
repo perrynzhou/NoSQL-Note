@@ -26,6 +26,11 @@
 - [redis字符串操作实现-持续更新](./document/redis/2020-12-02-redis字符串操作实现.md)
 - [redis6强制多线程调试](./document/redis/2020-12-04-Redis6强制多线程调试.md)
 - [Redis集群技术介绍](./document/redis/2020-12-05-Redis集群技术介绍.md)
+- [Redis-Cluster原理](./document/redis/2020-12-07-Redis-Cluster原理.md)
+
+
+
+
 
 ## memcached篇
 - [memcached介绍](./document/memcached/memcached基本介绍.md)
