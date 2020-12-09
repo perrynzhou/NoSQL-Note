@@ -42,8 +42,11 @@
 /* Unused arguments generate annoying warnings... */
 #define DICT_NOTUSED(V) ((void) V)
 
+// 更加通用的dictEntry结构
 typedef struct dictEntry {
+    // 用户输入的key
     void *key;
+    // key对应的值，类型有string/list/set/zset/hash等
     void *val;
     struct dictEntry *next;
 } dictEntry;
@@ -58,11 +61,17 @@ typedef struct dictType {
 } dictType;
 
 typedef struct dict {
+    // 字典的指针数组
     dictEntry **table;
+    // 字典类型
     dictType *type;
+    // table数组的长度,初始化长度为4,后续增长的长度都是前长度的一倍，比如4,8,16,32,64
     unsigned long size;
+    // 长度的mask,mask的值永远等于size-1,比如3,7,15,31。这个值用于和key计算以后的哈希做与运算，进行取余数运算
     unsigned long sizemask;
+    // 当前dict中元素个数，包括next单链表的数据
     unsigned long used;
+    // 私有数据
     void *privdata;
 } dict;
 

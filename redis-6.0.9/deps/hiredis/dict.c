@@ -50,6 +50,7 @@ static int _dictInit(dict *ht, dictType *type, void *privDataPtr);
 
 /* Generic hash function (a popular one from Bernstein).
  * I tested a few and this was the best. */
+// 这里采用了 times 33 散列函数，其核心的算法： hash[i] = hash(i-1)*33 + str[i],redis目前采用用了dictGenHashFunction方法
 static unsigned int dictGenHashFunction(const unsigned char *buf, int len) {
     unsigned int hash = 5381;
 
