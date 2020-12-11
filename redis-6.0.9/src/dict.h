@@ -47,11 +47,14 @@
 typedef struct dictEntry {
     void *key;
     union {
+        // 用dict存储整个数据库键值对时候，用的val存储值
         void *val;
         uint64_t u64;
+        // 当字典被用作记录键的过期时间，用s64来存储
         int64_t s64;
         double d;
     } v;
+    //当有dict哈希冲突时候，使用链表来解决冲突
     struct dictEntry *next;
 } dictEntry;
 
@@ -67,17 +70,29 @@ typedef struct dictType {
 /* This is our hash table structure. Every dictionary has two of this as we
  * implement incremental rehashing, for the old to the new table. */
 typedef struct dictht {
+    // 哈希表数组
     dictEntry **table;
+    //table数组长度
     unsigned long size;
+    // table数组长度掩码，比如table数组长度为4,8,16,32,64；他们的掩码分别为3,7,15,31,63.，每个key计算通过哈希计算得出一个hash值
+    // 根据这个hash值和table掩码计算出这个kv存储在dict中哪个位置。 index = hash(key)&dictht->ht[0]->sizemask
     unsigned long sizemask;
+
+    //当前table中元素个数，包括next单链表的数据
     unsigned long used;
 } dictht;
 
 typedef struct dict {
+    // 针对字典的操作函数
     dictType *type;
+    //该字典的私有数据
     void *privdata;
+    // 渐进式的dict存储，一般情况会使用ht[0], 当该字典扩容或者缩容时候，才会使用到ht[1]
     dictht ht[2];
+    //rehash标记，rehash=-1，代表么有进行rehash操作；rehash!=-1时，代表正在进行rehash操作，这个之代表正在做rehash的某个键值对的所索引值
     long rehashidx; /* rehashing not in progress if rehashidx == -1 */
+
+    // 当前运行的迭代器
     unsigned long iterators; /* number of iterators currently running */
 } dict;
 
