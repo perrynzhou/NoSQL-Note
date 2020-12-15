@@ -200,6 +200,7 @@ int dictRehash(dict *d, int n) {
             d->rehashidx++;
             if (--empty_visits == 0) return 1;
         }
+        // 迁移某个index对应的dict item
         de = d->ht[0].table[d->rehashidx];
         /* Move all the keys in this bucket from the old to the new hash HT */
         while(de) {
@@ -214,6 +215,7 @@ int dictRehash(dict *d, int n) {
             d->ht[1].used++;
             de = nextde;
         }
+        // 迁移完成设置初始化状态
         d->ht[0].table[d->rehashidx] = NULL;
         d->rehashidx++;
     }
@@ -495,6 +497,7 @@ dictEntry *dictFind(dict *d, const void *key)
     // 每次key的查找，处于rehash状态，每次会做100个key rehash
     if (dictIsRehashing(d)) _dictRehashStep(d);
     h = dictHashKey(d, key);
+    // 从ht[0]开始，到ht[1]结束，分别在两个dictht中进行查找
     for (table = 0; table <= 1; table++) {
         idx = h & d->ht[table].sizemask;
         he = d->ht[table].table[idx];

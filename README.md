@@ -27,6 +27,7 @@
 - [redis6强制多线程调试](./document/redis/2020-12-04-Redis6强制多线程调试.md)
 - [Redis集群技术介绍](./document/redis/2020-12-05-Redis集群技术介绍.md)
 - [Redis-Cluster原理](./document/redis/2020-12-07-Redis-Cluster原理.md)
+- [Redis中字典的实现](./document/redis/2020-12-15-Redis中字典的实现.md)
 
 
 
