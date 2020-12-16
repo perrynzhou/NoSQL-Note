@@ -33,8 +33,12 @@
 #include <stdint.h>
 
 typedef struct intset {
+    // encoding表示当前集合中每个元素的长度
+    // encoding长度为什么是需要uint32_t呢，讲道理这里能表示的长度分别为16,32,64个字节，uint8_t就可以了
     uint32_t encoding;
+    //当前集合的元素个数
     uint32_t length;
+    //存储的实际元素
     int8_t contents[];
 } intset;
 

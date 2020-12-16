@@ -139,6 +139,7 @@ static int dictAdd(dict *ht, void *key, void *val) {
 
     /* Get the index of the new element, or -1 if
      * the element already exists. */
+    // _dictKeyIndex 还会检查当前字典的大小，会根据情况进行扩容或者缩容
     if ((index = _dictKeyIndex(ht, key)) == -1)
         return DICT_ERR;
 

@@ -211,7 +211,10 @@ int dbAddRDBLoad(redisDb *db, sds key, robj *val) {
  * This function does not modify the expire time of the existing key.
  *
  * The program is aborted if the key was not already present. */
+
+// redis中修改元素
 void dbOverwrite(redisDb *db, robj *key, robj *val) {
+    // find过程可能会在做100个key的rehash
     dictEntry *de = dictFind(db->dict,key->ptr);
 
     serverAssertWithInfo(NULL,key,de != NULL);
@@ -220,13 +223,15 @@ void dbOverwrite(redisDb *db, robj *key, robj *val) {
     if (server.maxmemory_policy & MAXMEMORY_FLAG_LFU) {
         val->lru = old->lru;
     }
+    // 设置新的value
     dictSetVal(db->dict, de, val);
 
+    // 如果配置异步释放策略，异步释放资源，交给bio线程后台来做
     if (server.lazyfree_lazy_server_del) {
         freeObjAsync(old);
         dictSetVal(db->dict, &auxentry, NULL);
     }
-
+    // 同步释放
     dictFreeVal(db->dict, &auxentry);
 }
 
@@ -242,6 +247,7 @@ void dbOverwrite(redisDb *db, robj *key, robj *val) {
  * The client 'c' argument may be set to NULL if the operation is performed
  * in a context where there is no clear client performing the operation. */
 void genericSetKey(client *c, redisDb *db, robj *key, robj *val, int keepttl, int signal) {
+    // 查找 或者 添加key,如果处于rehash状态，也会做100个key 的rehash
     if (lookupKeyWrite(db,key) == NULL) {
         dbAdd(db,key,val);
     } else {

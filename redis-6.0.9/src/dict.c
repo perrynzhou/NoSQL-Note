@@ -107,6 +107,7 @@ static void _dictReset(dictht *ht)
     ht->used = 0;
 }
 
+// dict初始化
 /* Create a new hash table */
 dict *dictCreate(dictType *type,
         void *privDataPtr)
@@ -199,6 +200,7 @@ int dictRehash(dict *d, int n) {
             d->rehashidx++;
             if (--empty_visits == 0) return 1;
         }
+        // 迁移某个index对应的dict item
         de = d->ht[0].table[d->rehashidx];
         /* Move all the keys in this bucket from the old to the new hash HT */
         while(de) {
@@ -213,6 +215,7 @@ int dictRehash(dict *d, int n) {
             d->ht[1].used++;
             de = nextde;
         }
+        // 迁移完成设置初始化状态
         d->ht[0].table[d->rehashidx] = NULL;
         d->rehashidx++;
     }
@@ -240,6 +243,8 @@ long long timeInMilliseconds(void) {
 /* Rehash in ms+"delta" milliseconds. The value of "delta" is larger 
  * than 0, and is smaller than 1 in most cases. The exact upper bound 
  * depends on the running time of dictRehash(d,100).*/
+
+// 在redis server 定期器中会定期做100个key的rehash
 int dictRehashMilliseconds(dict *d, int ms) {
     long long start = timeInMilliseconds();
     int rehashes = 0;
@@ -273,7 +278,7 @@ int dictAdd(dict *d, void *key, void *val)
     return DICT_OK;
 }
 
-/* Low level add or find:
+/* Low level add or find key:
  * This function adds the entry but instead of setting a value returns the
  * dictEntry structure to the user, that will make sure to fill the value
  * field as he wishes.
@@ -297,10 +302,13 @@ dictEntry *dictAddRaw(dict *d, void *key, dictEntry **existing)
     dictEntry *entry;
     dictht *ht;
 
+    // 每当插入key时候做一个key的rehash
     if (dictIsRehashing(d)) _dictRehashStep(d);
 
     /* Get the index of the new element, or -1 if
      * the element already exists. */
+
+    //  _dictKeyIndex函数会根据情况进行字典的扩容或者缩容
     if ((index = _dictKeyIndex(d, key, dictHashKey(d,key), existing)) == -1)
         return NULL;
 
@@ -363,6 +371,7 @@ dictEntry *dictAddOrFind(dict *d, void *key) {
 /* Search and remove an element. This is an helper function for
  * dictDelete() and dictUnlink(), please check the top comment
  * of those functions. */
+// 删除key的具体函数实现，这里是同步释放key和value
 static dictEntry *dictGenericDelete(dict *d, const void *key, int nofree) {
     uint64_t h, idx;
     dictEntry *he, *prevHe;
@@ -402,6 +411,8 @@ static dictEntry *dictGenericDelete(dict *d, const void *key, int nofree) {
 
 /* Remove an element, returning DICT_OK on success or DICT_ERR if the
  * element was not found. */
+
+// 删除一个key操作
 int dictDelete(dict *ht, const void *key) {
     return dictGenericDelete(ht,key,0) ? DICT_OK : DICT_ERR;
 }
@@ -475,14 +486,18 @@ void dictRelease(dict *d)
     zfree(d);
 }
 
+// 查找ht[0]或者ht[1]中查找key
 dictEntry *dictFind(dict *d, const void *key)
 {
     dictEntry *he;
     uint64_t h, idx, table;
 
     if (dictSize(d) == 0) return NULL; /* dict is empty */
+
+    // 每次key的查找，处于rehash状态，每次会做100个key rehash
     if (dictIsRehashing(d)) _dictRehashStep(d);
     h = dictHashKey(d, key);
+    // 从ht[0]开始，到ht[1]结束，分别在两个dictht中进行查找
     for (table = 0; table <= 1; table++) {
         idx = h & d->ht[table].sizemask;
         he = d->ht[table].table[idx];
