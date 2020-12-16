@@ -28,7 +28,7 @@
 - [Redis集群技术介绍](./document/redis/2020-12-05-Redis集群技术介绍.md)
 - [Redis-Cluster原理](./document/redis/2020-12-07-Redis-Cluster原理.md)
 - [Redis中字典的实现](./document/redis/2020-12-15-Redis中字典的实现.md)
-
+- [intset集合实现原理](./document/redis/2020-12-16-intset集合实现原理.md)
 
 
 
