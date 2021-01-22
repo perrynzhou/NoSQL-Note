@@ -535,6 +535,8 @@ int aeWait(int fd, int mask, long long milliseconds) {
 
 void aeMain(aeEventLoop *eventLoop) {
     eventLoop->stop = 0;
+    // AE_ALL_EVENTS 标识需要处理文件事件和时间事件
+    // AE_CALL_AFTER_SLEEP 标识 阻塞等待文件事件之后需要执行aftersleep
     while (!eventLoop->stop) {
         aeProcessEvents(eventLoop, AE_ALL_EVENTS|
                                    AE_CALL_BEFORE_SLEEP|

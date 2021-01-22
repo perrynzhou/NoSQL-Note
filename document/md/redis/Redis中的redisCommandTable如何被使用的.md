@@ -33,9 +33,9 @@ struct redisCommand {
     // 回调函数，参数是客户端结构体
     redisCommandProc *proc;
     int arity;
-    // redis命令中的flag的字符串表现形式
+    // redis命令中的flag的字符串表现形式,标识命令是读还是写
     char *sflags;   
-    // 命令中的实际的flag
+    // 命令中的实际的flag，标识命令是读还是写
     uint64_t flags;
     // 在redis cluster中用于重定向
     redisGetKeysProc *getkeys_proc;
@@ -43,6 +43,7 @@ struct redisCommand {
     int firstkey; 
     int lastkey;  
     int keystep; 
+    // 从服务启动到现在命令执行总时间和总次数
     long long microseconds, calls;
     // 用于acl中，表示为命令的id
     int id;    
