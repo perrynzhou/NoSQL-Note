@@ -825,6 +825,7 @@ typedef struct client {
     long long read_reploff; /* Read replication offset if this is a master. */
     long long reploff;      /* Applied replication offset if this is a master. */
     long long repl_ack_off; /* Replication ack offset, if this is a slave. */
+    // 主从心跳检测上一次的检测时间
     long long repl_ack_time;/* Replication ack time, if this is a slave. */
     long long psync_initial_offset; /* FULLRESYNC reply offset other slaves
                                        copying this slave output buffer
@@ -1108,6 +1109,7 @@ struct redisServer {
     list *clients_to_close;     /* Clients to close asynchronously */
     list *clients_pending_write; /* There is to write or install handler. */
     list *clients_pending_read;  /* Client has pending read socket buffers. */
+    // slaves是记录从服务器的链表
     list *slaves, *monitors;    /* List of slaves and MONITORs */
     client *current_client;     /* Current client executing the command. */
     rax *clients_timeout_table; /* Radix tree for blocked clients timeouts. */
@@ -1290,17 +1292,26 @@ struct redisServer {
     char *syslog_ident;             /* Syslog ident */
     int syslog_facility;            /* Syslog facility */
     /* Replication (master) */
+    //对于主服务器，当前主服务运行的 ID；对于从服务器表示其复制的主服务器 ID
     char replid[CONFIG_RUN_ID_SIZE+1];  /* My current replication ID. */
+    // 当从切换为主时候，这个字段被设置为主的REP ID
     char replid2[CONFIG_RUN_ID_SIZE+1]; /* replid inherited from master*/
     long long master_repl_offset;   /* My current replication offset */
+    // 主从前切换时候保存主服务器复制的偏移量
     long long second_replid_offset; /* Accept offsets up to this for replid2. */
     int slaveseldb;                 /* Last SELECTed DB in replication output */
+    // 主从服务器之间发送心跳的周期
     int repl_ping_slave_period;     /* Master pings the slave every N seconds */
+    // 复制缓冲区，主要用于缓存主服务器已经执行待发送给从服务器的命令请求；缓冲区大小是由repl_backlog_size决定，默认是1M
     char *repl_backlog;             /* Replication backlog for partial syncs */
+    // 复制缓冲区的大小
     long long repl_backlog_size;    /* Backlog circular buffer size */
+    // 复制缓冲区中存储命令请求的数据长度
     long long repl_backlog_histlen; /* Backlog actual data length */
+    // 复制缓冲区中存储命令请求的最后一个字节的索引位置，即向复制缓冲区写入数据会从该索引位置开始
     long long repl_backlog_idx;     /* Backlog circular buffer current offset,
                                        that is the next byte will'll write to.*/
+    // 复制缓冲区中第一个字节的复制偏移量
     long long repl_backlog_off;     /* Replication "master offset" of first
                                        byte in the replication backlog buffer.*/
     time_t repl_backlog_time_limit; /* Time without slaves after the backlog
@@ -1309,6 +1320,7 @@ struct redisServer {
                                        Only valid if server.slaves len is 0. */
     int repl_min_slaves_to_write;   /* Min number of slaves to write. */
     int repl_min_slaves_max_lag;    /* Max lag of <count> slaves to write. */
+    // 当前有效从服务器的数目
     int repl_good_slaves_count;     /* Number of slaves with lag <= max_lag. */
     int repl_diskless_sync;         /* Master send RDB to slaves sockets directly. */
     int repl_diskless_load;         /* Slave parse RDB directly from the socket.
@@ -1317,7 +1329,9 @@ struct redisServer {
     /* Replication (slave) */
     char *masteruser;               /* AUTH with this user and masterauth with master */
     char *masterauth;               /* AUTH with this password with master */
+    // 主服务器IP
     char *masterhost;               /* Hostname of master */
+    // 主服务器端口
     int masterport;                 /* Port of master */
     int repl_timeout;               /* Timeout after N seconds of master idle */
     client *master;     /* Client that is master for this slave */
@@ -1331,7 +1345,9 @@ struct redisServer {
     int repl_transfer_fd;    /* Slave -> Master SYNC temp file descriptor */
     char *repl_transfer_tmpfile; /* Slave-> master SYNC temp file name */
     time_t repl_transfer_lastio; /* Unix time of the latest read, for timeout */
+    //当主从断开时候，该变量记录从服务器是否继续处理请求
     int repl_serve_stale_data; /* Serve stale data when link is down? */
+    // 表示从服务器只读
     int repl_slave_ro;          /* Slave is read only? */
     int repl_slave_ignore_maxmemory;    /* If true slaves do not evict. */
     time_t repl_down_since; /* Unix time at which link with master went down */

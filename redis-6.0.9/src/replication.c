@@ -158,6 +158,7 @@ void freeReplicationBacklog(void) {
  * This function also increments the global replication offset stored at
  * server.master_repl_offset, because there is no case where we want to feed
  * the backlog without incrementing the offset. */
+// 向复制缓冲区写入数据
 void feedReplicationBacklog(void *ptr, size_t len) {
     unsigned char *p = ptr;
 
@@ -205,6 +206,7 @@ void feedReplicationBacklogWithObject(robj *o) {
  * the commands received by our clients in order to create the replication
  * stream. Instead if the instance is a slave and has sub-slaves attached,
  * we use replicationFeedSlavesFromMasterStream() */
+// 当主从所有流程走玩后，主服务器每次接受到写命令，都会将命令请求广播给所有从服务器
 void replicationFeedSlaves(list *slaves, int dictid, robj **argv, int argc) {
     listNode *ln;
     listIter li;
@@ -513,6 +515,8 @@ int replicationSetupSlaveForFullResync(client *slave, long long offset) {
  *
  * On success return C_OK, otherwise C_ERR is returned and we proceed
  * with the usual full resync. */
+
+// 主服务器发送psync请求，开始同步数据。
 int masterTryPartialResynchronization(client *c) {
     long long psync_offset, psync_len;
     char *master_replid = c->argv[1]->ptr;
@@ -860,6 +864,11 @@ void syncCommand(client *c) {
  * In the future the same command can be used in order to configure
  * the replication to initiate an incremental replication instead of a
  * full resync. */
+
+// 主节点处理主从复制的入口函数，主要解析来自客户端的参数。该函数实现了如下三个功能：
+// 1.记录从服务器的IP和端口
+// 2.客户端能力标识，eof标识主服务器可以直接将数据库以RDB协议格式通过sock发送给从服务器，免去本地磁盘文件不必要读写操作；
+// 3.从服务器的复制偏移量
 void replconfCommand(client *c) {
     int j;
 
@@ -1479,6 +1488,8 @@ void disklessLoadRestoreBackups(redisDb *backup, int restore, int empty_db_flags
 
 /* Asynchronously read the SYNC payload we receive from a master */
 #define REPL_MAX_WRITTEN_BEFORE_FSYNC (1024*1024*8) /* 8 MB */
+
+// 实现rbd接受和加载，加载完成后修改状态
 void readSyncBulkPayload(connection *conn) {
     char buf[PROTO_IOBUF_LEN];
     ssize_t nread, readlen, nwritten;
@@ -1964,6 +1975,8 @@ char *sendSynchronousCommand(int flags, connection *conn, ...) {
 #define PSYNC_FULLRESYNC 3
 #define PSYNC_NOT_SUPPORTED 4
 #define PSYNC_TRY_LATER 5
+
+// 1.尝试获取主服务器运行ID，并向主服务器发送psyc请求；2.读取并解析psync命令的回复来判断执行完整全量同步还是部分同步，参数read_reply 来决定执行1或者2
 int slaveTryPartialResynchronization(connection *conn, int read_reply) {
     char *psync_replid;
     char psync_offset[32];
@@ -2869,6 +2882,8 @@ void replicationResurrectCachedMaster(connection *conn) {
 /* This function counts the number of slaves with lag <= min-slaves-max-lag.
  * If the option is active, the server will prevent writes if there are not
  * enough connected slaves with the specified lag (or less). */
+
+// 实现主服务器检测从服务器的有效性
 void refreshGoodSlavesCount(void) {
     listIter li;
     listNode *ln;
