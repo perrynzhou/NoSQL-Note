@@ -102,11 +102,19 @@ typedef struct aeEventLoop {
     int setsize; /* max number of file descriptors tracked */
     long long timeEventNextId;
     time_t lastTime;     /* Used to detect system clock skew */
+    // events 为文件事件数组，存储已经注册的文件事件
     aeFileEvent *events; /* Registered events */
+
+    // fired存储被出发的文件事件
     aeFiredEvent *fired; /* Fired events */
+
+    // 时间事件链表头节点
     aeTimeEvent *timeEventHead;
+    // stop 标识事件循环是否结束
     int stop;
     void *apidata; /* This is used for polling API specific data */
+
+    // redis服务进程需要阻塞等待文件事件发生，进程阻塞之前会调用beforesleep,进程被唤醒后会调用aftersleep函数
     aeBeforeSleepProc *beforesleep;
     aeBeforeSleepProc *aftersleep;
     int flags;
