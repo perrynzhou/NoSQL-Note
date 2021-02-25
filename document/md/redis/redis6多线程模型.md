@@ -6,7 +6,7 @@
 ### redis 多线程架构
 
 
- ![redis-multi-thread](../images/redis-multi-thread.jpg)
+ ![redis-multi-thread](../../images/redis-multi-thread.jpg)
 
 
 - redis6之前的版本一直单线程方式解析命令、处理命令，这样的模式实现起来简单，但是无法使用多核CPU的优势，无法达到性能的极致；到了redis 6，redis6采用多线程模式来来读取和解析命令，但是命令的执行依然通过队列由主线程串行执行，多线程的好处是分离了命令的解析和命令执行，命令的解析有独立的IO线程进行，命令执行依旧有main线程执行,多线程增加了代码的复杂度
@@ -27,8 +27,8 @@
   }
   ```
 - 启动redis并查看多线程
-    ![redis-struct](../images/start-redis-multi-thread.jpg)
-    ![redis-thrad](../images/2.png)
+    ![redis-struct](../..//images/start-redis-multi-thread.jpg)
+    ![redis-thrad](../../images/2.png)
     - redis-server thread:从队列中取出数据一次执行命令
     - bio_aof_fsync thread :page cache中的aof数据fsync到磁盘的线程
     - io_thd thread: 从tcp中读取命令同时解析命令
