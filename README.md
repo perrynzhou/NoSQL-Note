@@ -25,6 +25,7 @@
 - [redis6.x启动过程-持续更新](./document/md/redis/redis6.x启动过程.md)
 - [redis字符串操作实现-持续更新](./document/md/redis/2020-12-02-redis字符串操作实现.md)
 - [redis6强制多线程调试](./document/md/redis/2020-12-04-Redis6强制多线程调试.md)
+- [redis6多线程](./document/md/redis/redis6多线程模型.md)
 - [Redis集群技术介绍](./document/md/redis/2020-12-05-Redis集群技术介绍.md)
 - [Redis-Cluster原理](./document/md/redis/2020-12-07-Redis-Cluster原理.md)
 - [Redis中字典的实现](./document/md/redis/2020-12-15-Redis中字典的实现.md)
