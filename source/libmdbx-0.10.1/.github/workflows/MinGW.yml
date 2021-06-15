@@ -1,0 +1,64 @@
+name: MinGW
+
+on:
+  pull_request:
+  push:
+    branches: mingw
+    paths-ignore:
+    - '.circleci/**'
+    - '.github/actions/spelling/**'
+    - 'docs/**'
+    - 'packages**'
+    - .cirrus.yml
+    - .clang-format
+    - .gitignore
+    - .travis.yml
+    - AUTHORS
+    - COPYRIGHT
+    - ChangeLog.md
+    - LICENSE
+    - README.md
+    - appveyor.yml
+
+jobs:
+  build:
+    runs-on: [windows-latest]
+    steps:
+    - uses: actions/checkout@v2
+    - name: fetch tags
+      run: git fetch --unshallow --tags --prune --force
+    - name: update mingw64
+      # wanna version >= 10.2
+      run: choco upgrade mingw -y --no-progress
+    - name: configure-dll
+      run: mkdir build-dll && cd build-dll && cmake  -G "MinGW Makefiles" -DMDBX_BUILD_SHARED_LIBRARY:BOOL=ON -DMDBX_INSTALL_STATIC:BOOL=OFF ..
+    - name: build-dll
+      run: cd build-dll && cmake --build .
+    - name: test-dll
+      shell: pwsh
+      run: |
+        cd build-dll
+        ls
+        ./mdbx_test --progress --console=no --pathname=test.db --dont-cleanup-after basic > test.log
+        Get-Content test.log | Select-Object -last 42
+        if ($LastExitCode -ne 0) {
+            throw "Exec: $ErrorMessage"
+        } else {
+            ./mdbx_chk -nvv test.db | Tee-Object -file chk.log | Select-Object -last 42
+        }
+    - name: configure-static
+      run: mkdir build-static && cd build-static && cmake  -G "MinGW Makefiles" -DMDBX_BUILD_SHARED_LIBRARY:BOOL=OFF -DMDBX_INSTALL_STATIC:BOOL=ON ..
+    - name: build-static
+      run: cd build-static && cmake --build .
+    - name: test-static
+      shell: pwsh
+      run: |
+        cd build-static
+        ls
+        ./mdbx_test --progress --console=no --pathname=test.db --dont-cleanup-after basic > test.log
+        Get-Content test.log | Select-Object -last 42
+        if ($LastExitCode -ne 0) {
+            throw "Exec: $ErrorMessage"
+        } else {
+            ./mdbx_chk -nvv test.db | Tee-Object -file chk.log | Select-Object -last 42
+        }
